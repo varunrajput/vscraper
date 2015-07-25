@@ -1,2 +1,2 @@
 # vscraper
-A multi-threaded configurable framework to scrape results from APIs
+A multi-threaded framework for running queries against APIs to fetch results
