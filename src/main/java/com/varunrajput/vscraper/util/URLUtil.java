@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
+import org.apache.commons.httpclient.HostConfiguration;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.HttpStatus;
@@ -15,6 +16,7 @@ import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.params.HttpConnectionManagerParams;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,8 +30,19 @@ public class URLUtil {
   private static final Logger log = LoggerFactory.getLogger(URLUtil.class);
   private static Integer numRetries = Integer.parseInt(PropertiesUtil
       .get(Property.NumRetries));
-  private static HttpClient client = new HttpClient(
-      new MultiThreadedHttpConnectionManager());
+  
+  private static HttpClient client = null;
+  
+  static {
+    int numScrapers = Integer.parseInt(PropertiesUtil.get(Property.NumScrapers, "100"));
+    MultiThreadedHttpConnectionManager multiThreadedHttpConnectionManager = new MultiThreadedHttpConnectionManager();
+    HttpConnectionManagerParams params = new HttpConnectionManagerParams();
+    params.setMaxConnectionsPerHost(HostConfiguration.ANY_HOST_CONFIGURATION, numScrapers);
+    params.setDefaultMaxConnectionsPerHost(numScrapers);
+    params.setMaxTotalConnections(numScrapers);
+    multiThreadedHttpConnectionManager.setParams(params);
+    client = new HttpClient(multiThreadedHttpConnectionManager);
+  }
   
   public static String getOutputString(String baseUrl,
       Map<String,String> params, QueryMethod queryMethod) {
@@ -90,6 +103,9 @@ public class URLUtil {
     
     method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER,
         new DefaultHttpMethodRetryHandler(numRetries, false));
+    
+    method.getParams().setParameter(HttpMethodParams.SO_TIMEOUT,
+        Integer.parseInt(PropertiesUtil.get(Property.SocketTimeout)));
     
     return method;
   }

@@ -19,11 +19,11 @@ public class SolrOutput extends AbstractSolrOutput {
   
   protected static final String lineSeparator = "\n";
   
-  protected static final String fieldSeparator = PropertiesUtil.get(
-      Property.SolrOutputFieldSeparator, "\t");
+  protected static final String fieldSeparator = PropertiesUtil
+      .get(Property.SolrOutputFieldSeparator);
   
   protected static final Set<String> fieldsToExtract = new LinkedHashSet<String>(
-      Arrays.asList(PropertiesUtil.get(Property.SolrOutputFieldsToExtract, "*")
+      Arrays.asList(PropertiesUtil.get(Property.SolrOutputFieldsToExtract)
           .split(",")));
   
   protected static final String EMPTY_VALUE = "";

@@ -40,6 +40,7 @@ public class BatchPersistOutputManager implements OutputManager {
     batchWriterThread.start();
   }
   
+  @Override
   public void logOutput(Output output) {
     outputs.add(output);
     
@@ -47,6 +48,11 @@ public class BatchPersistOutputManager implements OutputManager {
     if (outputs.size() >= batchSize) {
       synchronized (this) {
         if (outputs.size() >= batchSize) {
+          while (batchWriter.isWriting) {
+            if (!batchWriter.isWriting) {
+              break;
+            }
+          }
           batchOutput = outputs;
           outputs = Collections.synchronizedList(new ArrayList<Output>());
         }
@@ -54,6 +60,7 @@ public class BatchPersistOutputManager implements OutputManager {
     }
   }
   
+  @Override
   public void generateOuputFile() {
     batchWriter.run = false;
     
@@ -93,13 +100,19 @@ public class BatchPersistOutputManager implements OutputManager {
    */
   private class BatchWriter implements Runnable {
     volatile boolean run = true;
+    volatile boolean isWriting = false;
     
+    @Override
     public void run() {
       while (run) {
         if (batchOutput != null && !batchOutput.isEmpty()) {
           synchronized (batchOutput) {
-            writeOutput(batchOutput, batchFile, true);
-            batchOutput = null;
+            if (batchOutput != null && !batchOutput.isEmpty()) {
+              isWriting = true;
+              writeOutput(batchOutput, batchFile, true);
+              batchOutput = null;
+              isWriting = false;
+            }
           }
         }
       }

@@ -7,6 +7,7 @@ import com.varunrajput.vscraper.Property;
 import com.varunrajput.vscraper.im.InputManager;
 import com.varunrajput.vscraper.om.OutputManager;
 import com.varunrajput.vscraper.scraper.Scraper;
+import com.varunrajput.vscraper.stats.ProgressTrackingStatsManager;
 import com.varunrajput.vscraper.util.ClassUtil;
 import com.varunrajput.vscraper.util.PropertiesUtil;
 
@@ -19,6 +20,7 @@ public class SimpleScraperManager implements ScraperManager {
   
   private InputManager queryManager;
   private OutputManager outputManager;
+  private ProgressTrackingStatsManager progressTrackingStatsManager;
   
   private Integer nScrapers = Integer.parseInt(PropertiesUtil
       .get(Property.NumScrapers));
@@ -30,6 +32,9 @@ public class SimpleScraperManager implements ScraperManager {
         Property.InputManagerClass);
     outputManager = ClassUtil.getNewInstance(OutputManager.class,
         Property.OutputManagerClass);
+    
+    progressTrackingStatsManager = new ProgressTrackingStatsManager(queryManager);
+    progressTrackingStatsManager.start();
     
     scrapers = new Thread[nScrapers];
     for (int i = 0; i < nScrapers; i++) {
@@ -43,6 +48,7 @@ public class SimpleScraperManager implements ScraperManager {
     }
   }
   
+  @Override
   public void runScrapers() {
     if (nScrapers < 0) {
       log.error("Unable to run. Scrapers have not been initialized");
@@ -59,7 +65,7 @@ public class SimpleScraperManager implements ScraperManager {
         log.error(e.getMessage(), e);
       }
     }
-    
+    progressTrackingStatsManager.stop();
     outputManager.generateOuputFile();
   }
 }

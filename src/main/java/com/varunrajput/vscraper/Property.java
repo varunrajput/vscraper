@@ -13,6 +13,7 @@ public interface Property {
   public String BaseUrl = "BASE_URL";
   public String QueryMethod = "QUERY_METHOD";
   public String NumRetries = "NUM_OF_RETRIES";
+  public String SocketTimeout = "HTTP_SOCKET_TIMEOUT";
   public String QueryParamKey = "QUERY_PARAM_KEY";
   
   public String QPS = "QPS";
@@ -27,6 +28,10 @@ public interface Property {
   
   public String OutputClass = "OUTPUT_CLASS";
   public String OutputManagerClass = "OUTPUT_MANAGER_CLASS";
+  
+  public String ProgressTrackingStatsManagerEnable = "PROGRESS_TRACKING_STATS_MANAGER_ENABLE";
+  public String ProgressTrackingStatsManagerInterval = "PROGRESS_TRACKING_STATS_MANAGER_INTERVAL";
+  public String ProgressTrackingStatsManagerWriteToConsole = "PROGRESS_TRACKING_STATS_MANAGER_WRITE_TO_CONSOLE";
   
   public String TabSeparatedInputQueryFieldIndex = "TAB_SEPARATED_INPUT_QUERY_FIELD_INDEX";
   
