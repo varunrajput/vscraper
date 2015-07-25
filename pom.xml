@@ -1,5 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.varunrajput</groupId>
   <artifactId>vscraper</artifactId>
@@ -8,8 +9,8 @@
   <description>A multi-threaded framework for running queries against APIs to fetch results</description>
   <url>https://github.com/varunrajput/vscraper</url>
   <scm>
-  	<connection>scm:git:git@github.com:varunrajput/vscraper.git</connection>
-  	<developerConnection>scm:git:git@github.com:varunrajput/vscraper.git</developerConnection>
+    <connection>scm:git:git@github.com:varunrajput/vscraper.git</connection>
+    <developerConnection>scm:git:git@github.com:varunrajput/vscraper.git</developerConnection>
     <url>git@github.com:varunrajput/vscraper.git</url>
   </scm>
   <dependencies>
@@ -34,6 +35,16 @@
       <version>1.0</version>
     </dependency>
   </dependencies>
+  <distributionManagement>
+    <snapshotRepository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </snapshotRepository>
+    <repository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+    </repository>
+  </distributionManagement>
   <build>
     <pluginManagement>
       <plugins>
@@ -56,10 +67,10 @@
             <descriptorRef>jar-with-dependencies</descriptorRef>
           </descriptorRefs>
           <archive>
-          	<manifest>
-				<mainClass>com.varunrajput.vscraper.VScraper</mainClass>
-			</manifest>
-		  </archive>
+            <manifest>
+              <mainClass>com.varunrajput.vscraper.VScraper</mainClass>
+            </manifest>
+          </archive>
         </configuration>
         <executions>
           <execution>
