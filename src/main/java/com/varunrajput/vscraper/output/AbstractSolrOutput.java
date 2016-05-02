@@ -1,11 +1,11 @@
 package com.varunrajput.vscraper.output;
 
-import java.util.List;
-import java.util.Map;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.varunrajput.vscraper.input.TabSeparatedInput;
+import com.varunrajput.vscraper.input.DelimitedInput;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author varunrajput
@@ -13,7 +13,7 @@ import com.varunrajput.vscraper.input.TabSeparatedInput;
 public abstract class AbstractSolrOutput implements Output {
   protected static final Gson gson = new GsonBuilder().create();
   
-  protected TabSeparatedInput input;
+  protected DelimitedInput input;
   protected SolrResponseHeader responseHeader;
   protected SolrResponse response;
   protected SolrResponse clusters;

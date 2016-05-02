@@ -1,16 +1,12 @@
 package com.varunrajput.vscraper.output;
 
-import java.util.Arrays;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import com.google.common.base.Joiner;
 import com.varunrajput.vscraper.Property;
+import com.varunrajput.vscraper.input.DelimitedInput;
 import com.varunrajput.vscraper.input.Input;
-import com.varunrajput.vscraper.input.TabSeparatedInput;
 import com.varunrajput.vscraper.util.PropertiesUtil;
+
+import java.util.*;
 
 /**
  * @author varunrajput
@@ -30,7 +26,7 @@ public class SolrOutput extends AbstractSolrOutput {
   
   @Override
   public void populateFromString(String outputString, Input input) {
-    this.input = (TabSeparatedInput) input;
+    this.input = (DelimitedInput) input;
     
     if (outputString != null && !outputString.isEmpty()) {
       SolrOutput parsedOutput = gson.fromJson(outputString,

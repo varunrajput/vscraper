@@ -1,19 +1,13 @@
 package com.varunrajput.vscraper.output;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.varunrajput.vscraper.Property;
+import com.varunrajput.vscraper.input.DelimitedInput;
 import com.varunrajput.vscraper.input.Input;
-import com.varunrajput.vscraper.input.TabSeparatedInput;
 import com.varunrajput.vscraper.util.PropertiesUtil;
+
+import java.util.*;
 
 /**
  * 
@@ -49,7 +43,7 @@ public class SolrComparisonOutput extends ComparisonOutput {
               PropertiesUtil.get(Property.ComparisonScrapingPrefixes).split(","))));
   
   protected Map<String, SolrOutput> solrOutputMap;
-  protected TabSeparatedInput input;
+  protected DelimitedInput input;
   
   public SolrComparisonOutput() {
     solrOutputMap = new HashMap<String, SolrOutput>();
@@ -59,7 +53,7 @@ public class SolrComparisonOutput extends ComparisonOutput {
   public void populateFromString(String comparisonPrefix, String outputString,
       Input input) {
     
-    this.input = (TabSeparatedInput) input;
+    this.input = (DelimitedInput) input;
     
     if (outputString != null && !outputString.isEmpty()) {
       SolrOutput parsedOutput = gson.fromJson(outputString, SolrOutput.class);

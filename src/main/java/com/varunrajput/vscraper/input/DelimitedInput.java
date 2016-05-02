@@ -1,26 +1,32 @@
 package com.varunrajput.vscraper.input;
 
+import com.varunrajput.vscraper.Property;
+import com.varunrajput.vscraper.util.PropertiesUtil;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-
-import com.varunrajput.vscraper.Property;
-import com.varunrajput.vscraper.util.PropertiesUtil;
+import java.util.regex.Pattern;
 
 /**
+ *
+ * This is a generic implementation for delimited input types. The default delimiter is '\t'
+ *
  * @author varunrajput
  */
-public class TabSeparatedInput implements Input {
+public class DelimitedInput implements Input {
   protected List<String> inputMetadata;
   protected String query;
-  
+
+  private static final Pattern delimiter = Pattern.compile(PropertiesUtil.get(Property.DelimitedInputDelimiter));
+
   private static final Integer queryFieldIdx = Integer.parseInt(PropertiesUtil
-      .get(Property.TabSeparatedInputQueryFieldIndex));
+      .get(Property.DelimitedInputQueryFieldIndex));
   
   @Override
   public void populateQuery(String input) {
-    String[] fields = input.split("\t");
+    String[] fields = delimiter.split(input);
     inputMetadata = new ArrayList<String>(fields.length - 1);
     for (int i = 0; i < fields.length; i++) {
       if (i == queryFieldIdx) {
