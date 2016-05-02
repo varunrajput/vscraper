@@ -13,8 +13,11 @@ public interface Property {
   String BaseUrl = "BASE_URL";
   String QueryMethod = "QUERY_METHOD";
   String NumRetries = "NUM_OF_RETRIES";
-  String SocketTimeout = "HTTP_SOCKET_TIMEOUT";
   String QueryParamKey = "QUERY_PARAM_KEY";
+
+  String EmailNotificationsEnable = "EMAIL_NOTIFICATIONS_ENABLE";
+  String EmailNotificationsAddress = "EMAIL_NOTIFICATIONS_ADDRESS";
+  String EmailNotificationsJobName = "EMAIL_NOTIFICATIONS_JOB_NAME";
   
   String QPS = "QPS";
   
