@@ -10,32 +10,32 @@ import com.varunrajput.vscraper.util.PropertiesUtil;
 public class ProgressTrackingStatsManager implements StatsManager {
   private static final Logger log = LoggerFactory
       .getLogger(ProgressTrackingStatsManager.class);
-  
+
   private static final Boolean enabled = Boolean.parseBoolean(PropertiesUtil
       .get(Property.ProgressTrackingStatsManagerEnable));
-  
+
   private Thread statsTrackerThread;
   private StatsTracker statsTracker;
-  
+
   public ProgressTrackingStatsManager(InputManager inputManager) {
     if (enabled) {
       statsTracker = new StatsTracker(Long.parseLong(PropertiesUtil
           .get(Property.ProgressTrackingStatsManagerInterval)),
           Boolean.parseBoolean(PropertiesUtil
               .get(Property.ProgressTrackingStatsManagerWriteToConsole)),
-              inputManager);
-      
+          inputManager);
+
       statsTrackerThread = new Thread(statsTracker);
     }
   }
-  
+
   @Override
   public void start() {
     if (enabled) {
       statsTrackerThread.start();
     }
   }
-  
+
   @Override
   public void stop() {
     if (enabled) {
@@ -48,39 +48,41 @@ public class ProgressTrackingStatsManager implements StatsManager {
       }
     }
   }
-  
+
   private class StatsTracker implements Runnable {
     volatile boolean run = true;
-    
+
     private Long interval;
     private Boolean writeToConsole;
     private InputManager inputManager;
-    
+
     public StatsTracker(Long interval, Boolean writeToConsole,
-        InputManager inputManager) {
+                        InputManager inputManager) {
       this.interval = interval;
       this.writeToConsole = writeToConsole;
       this.inputManager = inputManager;
     }
-    
+
     @Override
     public void run() {
       while (run) {
         String statsMessage = "Progress: "
-            + ((double) inputManager.totalInputs() - inputManager
-                .inputsRemaining()) / inputManager.totalInputs() * 100.0
-                + "% Checking again in " + interval + " ms";
-        
+            + String.format("%.2f", ((double) inputManager.totalInputs() - inputManager
+            .inputsRemaining()) / inputManager.totalInputs() * 100.0)
+            + "% Checking again in " + interval + "s";
+
         log.info(statsMessage);
         if (writeToConsole) {
           System.out.println(statsMessage);
         }
-        
+
         try {
-          Thread.sleep(interval);
-        } catch (InterruptedException e) {}
+          Thread.sleep(interval*1000);
+        } catch (InterruptedException e) {
+          log.warn(e.getMessage(), e);
+        }
       }
-      
+
       log.info("Scraping Complete");
       if (writeToConsole) {
         System.out.println("Scraping Complete");
